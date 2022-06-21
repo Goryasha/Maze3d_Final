@@ -1,0 +1,5 @@
+# ninja log v5
+49	17140	6775532773915379	CMakeFiles/frick.dir/camera.cpp.obj	bd6c8614d8f7c02c
+5	17878	6775532785667249	CMakeFiles/frick.dir/main.cpp.obj	60999ad09089a460
+83	20468	6775532812070444	CMakeFiles/frick.dir/generation.cpp.obj	98e4b072ede0055f
+20469	22030	6775532827675684	frick.exe	ebe452a9cc9cfeb5
