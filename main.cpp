@@ -1,24 +1,19 @@
+// Главный скрипт нашей прогрмаммы, ответственный за генерацию лабиринта и его отрисовку.
 #include <windows.h>
-#include <iostream>
 #include <gl/gl.h>
 #include <cmath>
 #include "function.h"
 #include "camera.h"
 #include "vector"
 
-const int coordinatex=5;
-const int coordinatey =5;
-const int coordinatez =5;
-
 HWND hwnd;
-unsigned int texture;
-float vertex[]={-0.5,-0.5,-0.5, 0.5,-0.5,-0.5, 0.5,0.5,-0.5, -0.5,0.5,-0.5,
-                -0.5,-0.5,0.5, 0.5,-0.5,0.5, 0.5,0.5,0.5, -0.5,0.5,0.5};
-float tex_coord[]={0,1, 1,1, 0,1, 1,1,
-                   0,0,1,0,0,0,1,0};
+// Маркер окна Windows, показывающий верхнее открытое окно. Вынесен из WinMain для возможности использования в других функциях.
 
-std::vector <std::vector <int>> baseInd;
+unsigned int texture;
+// Переменная, в которую далее будет записана текстура.
+
 int texIndCnt;
+// Длина набора индексов отрисовываемых текстур.
 
 void compare(std::vector<int> &current,bool &back,bool &right,bool &forw,bool &left,bool &bot,bool &top){
     if (back) {
@@ -70,10 +65,9 @@ void compare(std::vector<int> &current,bool &back,bool &right,bool &forw,bool &l
         current.push_back(6);
         current.push_back(7);
     }
-
 }
 
-void texindForm(int a, int b, int c,std::vector<int> &v2){
+void texindForm(int c,std::vector<int> &v2,std::vector <std::vector <int>> &baseInd){
     bool top =true;
     bool bot =true;
     bool right =true;
@@ -81,6 +75,7 @@ void texindForm(int a, int b, int c,std::vector<int> &v2){
     bool forw =true;
     bool back =true;
     std::vector <int> current={};
+    // Переменный описаны в function.h.
 
     for (int i = 0; i < v2.size(); i+=2) {
         if (i!=0) {
@@ -96,8 +91,6 @@ void texindForm(int a, int b, int c,std::vector<int> &v2){
                 current = {};
             }
         }
-
-
         if (v2[i + 1] - v2[i] == -c) {
             right = false;
         } else if (v2[i + 1] - v2[i] < -1) {
@@ -111,19 +104,24 @@ void texindForm(int a, int b, int c,std::vector<int> &v2){
         } else if (v2[i + 1] - v2[i] > 1) {
             forw = false;
         }
-
-
     }
     compare(current,back,right,forw,left,bot,top);
     baseInd.emplace(baseInd.begin() + v2[v2.size()-2], current);
 }
 
 void Load_Texture(){
-    int width,height;
-    width=2;
-    height=2;
-    struct {unsigned char r,g,b,a;} data[2][2];
-    memset(data,0,sizeof(data));
+    int width=2;
+    int height=2;
+    //Переменные хранят в себе ширину и высоту текстуры, то есть она будет 2*2.
+    struct {unsigned char r,g,b,a;} data[2][2] = {{0,0,0,0},
+                                                 {0,0,0,0}};
+    /*
+     * Структурка, хранящая в себе для каждого из блоков цвет и альфа-канал.
+     * r - красный;
+     * g - зеленый;
+     * b - синий;
+     * a - альфа-канал.
+     */
     data[0][0].r=255;
     data[1][0].g=255;
     data[1][1].b=255;
@@ -140,23 +138,33 @@ void Load_Texture(){
     glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA,width,height,0, GL_RGBA,GL_UNSIGNED_BYTE,data);
     glBindTexture(GL_TEXTURE_2D,0);
     glBindTexture(0,texture);
+    /*
+     * Эта часть кода создает на движке gl 1 текстуру, записывает параметры ее распространения на область тектсурирования,
+     * параметры цвета из data и наконец очищает буфер текстур.
+     */
 }
 
 void Win_Resize(int x, int y){
     glViewport(0,0,x,y);
     float k = x/(float)y;
+    // k - отношение длины к ширине окна.
     float sz=0.1;
+    // sz - коэффициент проектирования.
     glLoadIdentity();
     glFrustum(-k*sz,k*sz,-sz,sz,sz*2,80);
+    // Вот и наша перспективная проекция.
 }
 
 void GameInit(){
     Load_Texture();
 
-
     RECT rct;
     GetClientRect(hwnd,&rct);
     Win_Resize(rct.right,rct.bottom);
+    /*
+     * Получаем координаты клиентской области окна, переделываем перспективную проекцию и включаем тест глубины.
+     * rct - определяет прямоугольник по координатам его верхнего левого и нижнего правых углов.
+     */
     glEnable(GL_DEPTH_TEST);
 }
 
@@ -165,37 +173,32 @@ void Player_Move(){
     Camera_MoveByMouse(400,400);
 }
 
-void Game_Move(){
-    Player_Move();
-}
-
-
-void ShowWorld(float *vert,GLuint *ind, float *ppp, int ind_size, int vert_size){
+void ShowWorld(float *vert,GLuint *ind, float *ppp, int ind_size, int vert_size,float *tex_coord,float *vertex,std::vector <std::vector <int>> &baseInd){
     glClearColor(0.6196078431372549f, 0.9725490196078431f, 0.9333333333333333f, 0.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+    //Устанавливаем цвет фона и вклбчаем очищения буффера цвета и глубины.
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D,texture);
-
+    //Биндим текстуру
     glPushMatrix();
-    Camera_Apply();
+    Camera_Apply(coordinatex,coordinatey,coordinatez);
     glScalef(5,5,5);
-
+    // Добавляем камеру и увеличиваем размер изображения в 5 раз.
     glEnableClientState(GL_VERTEX_ARRAY);
 
 
-    glVertexPointer(3,GL_FLOAT,0,vert);
-    glColor3f(0.203921568627451,0.5333333333333333,0.5333333333333333);
-    glLineWidth(3);
-    glDrawElements(GL_LINES,ind_size,GL_UNSIGNED_INT,ind);
-
+//    glVertexPointer(3,GL_FLOAT,0,vert);
+//    glColor3f(0.203921568627451,0.5333333333333333,0.5333333333333333);
+//    glLineWidth(3);
+//    glDrawElements(GL_LINES,ind_size,GL_UNSIGNED_INT,ind);
+// Отрисовка лабиринта как дерева
 
     glVertexPointer(3,GL_FLOAT,0,ppp);
     glColor3f(0.9490196078431373,0.2666666666666667,0.0196078431372549);
-    glPointSize(10);
+    glPointSize(50);
     glDrawArrays(GL_POINTS,0,1);
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-
+// Отрисовка финальной точки.
 
     glColor3f(1,1,1);
     glEnableClientState(GL_VERTEX_ARRAY);
@@ -217,6 +220,11 @@ void ShowWorld(float *vert,GLuint *ind, float *ppp, int ind_size, int vert_size)
         glDrawElements(GL_TRIANGLES,texIndCnt,GL_UNSIGNED_INT,curr);
         glPopMatrix();
     }
+    /*
+     * На каждой итерации цикла для соответствующего индекса ноды из вектора набора индексов выбираются нужные координаты,
+     * отрисовываются кубы и текстуры на них.
+     */
+
     glDisableClientState(GL_VERTEX_ARRAY);
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);
     glPopMatrix();
@@ -227,27 +235,37 @@ void ShowWorld(float *vert,GLuint *ind, float *ppp, int ind_size, int vert_size)
 
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow){
+    float vertex[]={-0.5,-0.5,-0.5, 0.5,-0.5,-0.5, 0.5,0.5,-0.5, -0.5,0.5,-0.5,
+                    -0.5,-0.5,0.5, 0.5,-0.5,0.5, 0.5,0.5,0.5, -0.5,0.5,0.5};
+    float tex_coord[]={0,1, 1,1, 0,1, 1,1,
+                       0,0,1,0,0,0,1,0};
+    /*
+     * vertex - координаты единичного куба;
+     * tex_coord - массив текстурных координат.
+     */
+
+    std::vector <std::vector <int>> baseInd;
     auto v1 =std::vector<float>();
     auto v2 =std::vector<int>();
-    auto p = gen(coordinatex,coordinatey,coordinatez,0.3,0.3,0.3,v1,v2);
-    texindForm(coordinatex,coordinatey,coordinatez,v2);
+    auto p = gen(coordinatex,coordinatey,coordinatez,x_weight,y_weight,z_weight,v1,v2);
+    texindForm(coordinatez,v2,baseInd);
+    /*
+     * baseInd - двумерный вектор, в котором для каждого индекса единичного куба лежит набор индексов отрисовываемых текстур;
+     * v1 - вектор координат нод;
+     * v2 - вектор индексов нод;
+     * Формирование векторов и вектора координта текстур.
+     */
 
-
-    float vert[v1.size()];//координаты
-    GLuint ind[v2.size()];// индексы
+    float vert[v1.size()];
+    GLuint ind[v2.size()];
     float ppp[]={(float)p.x,(float)p.y,(float)p.z};
     std::copy(v1.begin(),v1.end(),vert);
     std::copy(v2.begin(),v2.end(),ind);
     int ind_size = v2.size();
     int vert_size = v1.size();
-    for (int i = 0; i <v2.size(); i+=2) {
-//        std::cout<<ind[i]<<' '<<ind[i+1]<<'\t'<<'\t'<<vert[3*ind[i]]<<' '<<vert[3*ind[i]+1]<<' '<<vert[3*ind[i]+2]<<'\t'<<'\t'<<vert[3*ind[i+1]]<<' '<<vert[3*ind[i+1]+1]<<' '<<vert[3*ind[i+1]+2]<<'\n';
-//        std::cout<<i<<'\n';
-//        for (int j = 0; j < baseInd[i].size(); j++) {
-//            std::cout<<baseInd[i][j]<<' ';
-//        }
-//        std::cout<<'\n';
-    }
+    /*
+     * Переписывание векторов в массивы для дальнейшей отрисовки.
+     */
 
 
     WNDCLASSEX wcex;
@@ -255,11 +273,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     HGLRC hRC;
     MSG msg;
     BOOL bQuit = FALSE;
-    float theta = 0.0f;
     /*
      *  Введение главных переменных для сообщением с Windows.
+     *  wcex - информация о классе окна;
+     *  hDC - дескриптор контекста устройства для отрисовки на окне;
+     *  msg - содержит сведения о сообщениях из очереди сообщений потока;
      *  bQuit - переменная отвечающая за статус окна.
-     *  theta - float для подсчета тиков.
      */
 
     wcex.cbSize = sizeof(WNDCLASSEX);
@@ -341,8 +360,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         else
         {
 
-            Game_Move();
-            ShowWorld(vert,ind,ppp,ind_size,vert_size);
+            Player_Move();
+            ShowWorld(vert,ind,ppp,ind_size,vert_size,tex_coord,vertex,baseInd);
 
             SwapBuffers(hDC);
 
@@ -406,7 +425,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
     return 0;
 }
-
+// Базовые строки кода для OpenGL. Написаны не мной.
 void EnableOpenGL(HWND hwnd, HDC* hDC, HGLRC* hRC)
 {
     PIXELFORMATDESCRIPTOR pfd;
