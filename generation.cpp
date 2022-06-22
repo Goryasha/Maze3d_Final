@@ -38,7 +38,6 @@ auto gen(size_t side_x, size_t side_y, size_t side_z, float weightx, float weigh
     vert_ind[Point(0, 0, 0)].second = 1;
     while (!st.empty()) {
         auto p = st.top();
-        // выбор направления
         auto neighbours = std::vector<Point>();
         auto dir = std::vector<char>();
         auto st_dir = std::set<char>();
@@ -142,7 +141,6 @@ auto gen(size_t side_x, size_t side_y, size_t side_z, float weightx, float weigh
             st.push(neighbours[num]);
         }
     }
-    //заполнение index и vert
     for (auto item: vert_ind) {
         vertex.push_back(static_cast<float>(item.first.x));
         vertex.push_back(static_cast<float>(item.first.y));
@@ -163,13 +161,6 @@ auto gen(size_t side_x, size_t side_y, size_t side_z, float weightx, float weigh
             p = item.first;
         }
     }
-
-//    for(size_t i = 0; i < vertex.size(); i++)
-//        std::cout<<vertex[i]<<' ';
-//    std::cout<<'\n';
-//    for(size_t i = 0; i < index.size(); i++)
-//        std::cout<<index[i]<<' ';
-//    std::cout<<'\n';
     return p;
 }
 
