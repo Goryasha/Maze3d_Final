@@ -4,6 +4,11 @@
 #include <cmath>
 #include "function.h"
 #include "camera.h"
+#include "vector"
+
+const int coordinatex=5;
+const int coordinatey =5;
+const int coordinatez =5;
 
 HWND hwnd;
 unsigned int texture;
@@ -11,10 +16,107 @@ float vertex[]={-0.5,-0.5,-0.5, 0.5,-0.5,-0.5, 0.5,0.5,-0.5, -0.5,0.5,-0.5,
                 -0.5,-0.5,0.5, 0.5,-0.5,0.5, 0.5,0.5,0.5, -0.5,0.5,0.5};
 float tex_coord[]={0,1, 1,1, 0,1, 1,1,
                    0,0,1,0,0,0,1,0};
-GLuint base_texind[] ={0,1,5,5,4,0,1,2,6,6,5,1,2,3,7,7,6,2,3,0,4,4,7,3,
-                       0,1,2,2,3,0,4,5,6,6,7,4};
 
-int texIndCnt = sizeof(base_texind)/sizeof(GLuint);
+std::vector <std::vector <int>> baseInd;
+int texIndCnt;
+
+void compare(std::vector<int> &current,bool &back,bool &right,bool &forw,bool &left,bool &bot,bool &top){
+    if (back) {
+        current.push_back(3);
+        current.push_back(0);
+        current.push_back(4);
+        current.push_back(4);
+        current.push_back(7);
+        current.push_back(3);
+    }
+
+    if (right) {
+        current.push_back(0);
+        current.push_back(1);
+        current.push_back(5);
+        current.push_back(5);
+        current.push_back(4);
+        current.push_back(0);
+    }
+    if (forw) {
+        current.push_back(1);
+        current.push_back(2);
+        current.push_back(6);
+        current.push_back(6);
+        current.push_back(5);
+        current.push_back(1);
+    }
+    if (left) {
+        current.push_back(2);
+        current.push_back(3);
+        current.push_back(7);
+        current.push_back(7);
+        current.push_back(6);
+        current.push_back(2);
+    }
+    if (bot) {
+        current.push_back(3);
+        current.push_back(0);
+        current.push_back(1);
+        current.push_back(1);
+        current.push_back(2);
+        current.push_back(3);
+    }
+    if (top) {
+        current.push_back(7);
+        current.push_back(4);
+        current.push_back(5);
+        current.push_back(5);
+        current.push_back(6);
+        current.push_back(7);
+    }
+
+}
+
+void texindForm(int a, int b, int c,std::vector<int> &v2){
+    bool top =true;
+    bool bot =true;
+    bool right =true;
+    bool left =true;
+    bool forw =true;
+    bool back =true;
+    std::vector <int> current={};
+
+    for (int i = 0; i < v2.size(); i+=2) {
+        if (i!=0) {
+            if (v2[i-2] != v2[i]) {
+                compare(current,back,right,forw,left,bot,top);
+                baseInd.emplace(baseInd.begin() + v2[i-2], current);
+                top = true;
+                bot = true;
+                right = true;
+                left = true;
+                forw = true;
+                back = true;
+                current = {};
+            }
+        }
+
+
+        if (v2[i + 1] - v2[i] == -c) {
+            right = false;
+        } else if (v2[i + 1] - v2[i] < -1) {
+            back = false;
+        } else if (v2[i + 1] - v2[i] == -1) {
+            bot = false;
+        } else if (v2[i + 1] - v2[i] == 1) {
+            top = false;
+        } else if (v2[i + 1] - v2[i] == c) {
+            left = false;
+        } else if (v2[i + 1] - v2[i] > 1) {
+            forw = false;
+        }
+
+
+    }
+    compare(current,back,right,forw,left,bot,top);
+    baseInd.emplace(baseInd.begin() + v2[v2.size()-2], current);
+}
 
 void Load_Texture(){
     int width,height;
@@ -96,18 +198,27 @@ void ShowWorld(float *vert,GLuint *ind, float *ppp, int ind_size, int vert_size)
 
 
     glColor3f(1,1,1);
-//    glEnableClientState(GL_VERTEX_ARRAY);
-//    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-//    glVertexPointer(3,GL_FLOAT,0,vertex);
-//    glTexCoordPointer(2,GL_FLOAT,0,tex_coord);
-//    for (int i=0;i<vert_size;i++){
-//        glPushMatrix();
-//        glTranslatef(vert[i],vert[i+1],vert[i+2]);
-//        glDrawElements(GL_TRIANGLES,texIndCnt,GL_UNSIGNED_INT,base_texind);
-//        glPopMatrix();
-//    }
-//    glDisableClientState(GL_VERTEX_ARRAY);
-//    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+    for (int i=0;i<ind_size;i+=2){
+        glVertexPointer(3,GL_FLOAT,0,vertex);
+        glTexCoordPointer(2,GL_FLOAT,0,tex_coord);
+
+
+        GLuint curr[baseInd[ind[i]].size()];
+        std::copy(baseInd[ind[i]].begin(),baseInd[ind[i]].end(),curr);
+        texIndCnt = sizeof(curr)/sizeof(GLuint);
+
+
+        glPushMatrix();
+
+        glTranslatef(vert[3*ind[i]],vert[3*ind[i]+1],vert[3*ind[i]+2]);
+        glDrawElements(GL_TRIANGLES,texIndCnt,GL_UNSIGNED_INT,curr);
+        glPopMatrix();
+    }
+    glDisableClientState(GL_VERTEX_ARRAY);
+    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
     glPopMatrix();
 
 
@@ -118,7 +229,9 @@ void ShowWorld(float *vert,GLuint *ind, float *ppp, int ind_size, int vert_size)
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow){
     auto v1 =std::vector<float>();
     auto v2 =std::vector<int>();
-    auto p = gen(5,5,5,0.3,0.3,0.3,v1,v2);
+    auto p = gen(coordinatex,coordinatey,coordinatez,0.3,0.3,0.3,v1,v2);
+    texindForm(coordinatex,coordinatey,coordinatez,v2);
+
 
     float vert[v1.size()];//координаты
     GLuint ind[v2.size()];// индексы
@@ -127,8 +240,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     std::copy(v2.begin(),v2.end(),ind);
     int ind_size = v2.size();
     int vert_size = v1.size();
-    for (int i = 0; i <ind_size; i+=2) {
-        std::cout<<ind[i]<<' '<<ind[i+1]<<'\t'<<'\t'<<vert[ind[i]]<<' '<<vert[ind[i]+1]<<' '<<vert[ind[i]+2]<<'\t'<<'\t'<<vert[ind[i+1]]<<' '<<vert[ind[i+1]+1]<<' '<<vert[ind[i+1]+2]<<'\n';
+    for (int i = 0; i <v2.size(); i+=2) {
+//        std::cout<<ind[i]<<' '<<ind[i+1]<<'\t'<<'\t'<<vert[3*ind[i]]<<' '<<vert[3*ind[i]+1]<<' '<<vert[3*ind[i]+2]<<'\t'<<'\t'<<vert[3*ind[i+1]]<<' '<<vert[3*ind[i+1]+1]<<' '<<vert[3*ind[i+1]+2]<<'\n';
+//        std::cout<<i<<'\n';
+//        for (int j = 0; j < baseInd[i].size(); j++) {
+//            std::cout<<baseInd[i][j]<<' ';
+//        }
+//        std::cout<<'\n';
     }
 
 
