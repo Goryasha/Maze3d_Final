@@ -1,3 +1,6 @@
+C:/Users/Горяинов Кирилл/CLionProjects/frick/cmake-build-debug/CMakeFiles/project-tests.dir
 C:/Users/Горяинов Кирилл/CLionProjects/frick/cmake-build-debug/CMakeFiles/frick.dir
-C:/Users/Горяинов Кирилл/CLionProjects/frick/cmake-build-debug/CMakeFiles/edit_cache.dir
 C:/Users/Горяинов Кирилл/CLionProjects/frick/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+C:/Users/Горяинов Кирилл/CLionProjects/frick/cmake-build-debug/CMakeFiles/test.dir
+C:/Users/Горяинов Кирилл/CLionProjects/frick/cmake-build-debug/CMakeFiles/doctest.dir
+C:/Users/Горяинов Кирилл/CLionProjects/frick/cmake-build-debug/CMakeFiles/edit_cache.dir

@@ -3,6 +3,7 @@
 #include <map>
 #include <vector>
 #include <iostream>
+
 #ifndef FRICK_FUNCTION_H
 #define FRICK_FUNCTION_H
 
@@ -22,7 +23,7 @@ LRESULT CALLBACK WindowProc(HWND HWND, UINT UNIT, WPARAM WPARAM, LPARAM LPARAM);
  * @param HDC - содержит сведения об атрибутах рисования устройства;
  * @param HGLRC - содержит контекст воспроизведения OpenGL.
  */
-void EnableOpenGL(HWND hwnd, HDC* HDC, HGLRC* HGLRC);
+void EnableOpenGL(HWND hwnd, HDC *HDC, HGLRC *HGLRC);
 
 /**
  * Запрет отрисовки GL.
@@ -52,7 +53,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
  * @param bot - существует ли соседняя нода в лабиринте снизу;
  * @param top - существует ли соседняя нода в лабиринте сверху.
  */
-void compare(std::vector<int> &current,bool &back,bool &right,bool &forw,bool &left,bool &bot,bool &top);
+void compare(std::vector<int> &current, bool &back, bool &right, bool &forw, bool &left, bool &bot, bool &top);
 
 /**
  * Функция texindForm формирует описанный ранее двумерный вектор индексов.
@@ -60,7 +61,7 @@ void compare(std::vector<int> &current,bool &back,bool &right,bool &forw,bool &l
  * @param v2 - ссылка на сформированный в generation массив индексов.
  * @param baseInd - двумерный вектор, в котором для каждого индекса единичного куба лежит набор индексов отрисовываемых текстур;
  */
-void texindForm(int c,std::vector<int> &v2,std::vector <std::vector <int>> &baseInd);
+void texindForm(int c, std::vector<int> &v2, std::vector<std::vector<int>> &baseInd);
 
 /**
  * Создает текстуру нашего любимого CodeBlocks и записывает его в texture.
@@ -93,25 +94,32 @@ void Player_Move();
  * @param vert_size - длина массива вершин;
  * @param tex_coord - массив текстурных координат единичного куба;
  * @param vertex - массив вершин единичного куба.
- * @param baseInd - двумерный вектор, в котором для каждого индекса единичного куба лежит набор индексов отрисовываемых текстур.
+ * @param baseInd - двумерный вектор, в котором для каждого индекса единичного куба лежит набор индексов отрисовываемых текстур;
+ * @param ind_clear - чистый массив индексов каждой ноды.
  */
-void ShowWorld(float *vert,GLuint *ind, float *ppp, int ind_size, int vert_size,float *tex_coord,float *vertex,std::vector <std::vector <int>> &baseInd);
+void ShowWorld(float *vert, GLuint *ind, float *ppp, int ind_size, int vert_size, float *tex_coord, float *vertex,
+               std::vector<std::vector<int>> &baseInd, GLuint *ind_clear);
 
 /**
  * @param coordinatex - размер лабиринта по оси x;
  * @param coordinatey - размер лабиринта по оси y;
  * @param coordinatez - размер лабиринта по оси z;
- * TODO: допиши тут про веса и сделай ниже описание.
+ * @param x_weight - приоритет создания прохода по оси x;
+ * @param y_weight - приоритет создания прохода по оси y;
+ * @param z_weight - приоритет создания прохода по оси z;
  */
-const int coordinatex = 10;
-const int coordinatey = 10;
-const int coordinatez = 10;
+const int coordinatex = 5;
+const int coordinatey = 5;
+const int coordinatez = 5;
 const float x_weight = 0.3;
 const float y_weight = 0.3;
 const float z_weight = 0.3;
 
 
-
+/**
+ * структура Точка(координата x, координата y, координата z)
+ * функция cor() выводит координаты точки
+ */
 struct Point {
     size_t x;
     size_t y;
@@ -144,20 +152,40 @@ struct Point {
     }
 };
 
-
-template<typename my_type>
-auto m_print(std::vector<std::vector<std::vector<my_type>>> &maze) -> void;
-
-struct Point;
+/**
+ * m_print() - выводит список смежности лабиринта
+ * @param maze список смежности лабиринта
+ */
+auto m_print(std::map<Point, std::vector<Point>> &maze) -> void;
 
 auto comp(std::pair<char, int> &a, std::pair<char, int> &b) -> bool;
 
+/**
+ * gen() - функция генерирующая лабиринт и записывающая его структуру в два вектора
+ * @param side_x размер лабиринта по x
+ * @param side_y размер лабиринта по y
+ * @param side_z размер лабиринта по z
+ * @param weightx приоритет создания прохода по x
+ * @param weighty приоритет создания прохода по y
+ * @param weightz приоритет создания прохода по z
+ * @param vertex ссылка на вектор, в котором будут храниться вершины
+ * @param index индексы вершин из вектора vertex, которые надо попарно соединить
+ */
 auto gen(size_t side_x, size_t side_y, size_t side_z, float weightx, float weighty, float weightz,
          std::vector<float> &vertex, std::vector<int> &index) -> Point;
 
+/**
+ * функция, расставляющая для каждой вершины кол-во вершин от неё до дерева + 1
+ * @param p0 вершина, которую рассматриваем на каждой итерации
+ * @param maze словарь вершин, где для каждой значением является вектор точек, с которыми они соединены
+ * @param vert_ind словарь, хранящий индексацию вершин и их отдалённость от корня
+ */
 auto cost(Point p0, std::map<Point, std::vector<Point>> &maze, std::map<Point, std::pair<int, int>> &vert_ind) -> void;
 
-auto cleaning(std::vector<int>& v) -> void;
+/**
+ * принимает вектор и очищает его от пар повторяющихся элементов, порядок элементов в паре не играет роли
+ * @param v вектор для очистки
+ */
+auto cleaning(std::vector<int> &v) -> void;
 
 #endif //FRICK_FUNCTION_H
-

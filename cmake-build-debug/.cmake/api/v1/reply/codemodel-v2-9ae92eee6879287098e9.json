@@ -15,7 +15,9 @@
 					"source" : ".",
 					"targetIndexes" : 
 					[
-						0
+						0,
+						1,
+						2
 					]
 				}
 			],
@@ -30,7 +32,9 @@
 					"name" : "frick",
 					"targetIndexes" : 
 					[
-						0
+						0,
+						1,
+						2
 					]
 				}
 			],
@@ -38,9 +42,23 @@
 			[
 				{
 					"directoryIndex" : 0,
+					"id" : "doctest::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-doctest-Debug-004fcef9b08407e3523c.json",
+					"name" : "doctest",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
 					"id" : "frick::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-frick-Debug-51afad1c4bbc1fe3972e.json",
+					"jsonFile" : "target-frick-Debug-4b15dafdde12891fb721.json",
 					"name" : "frick",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "project-tests::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-project-tests-Debug-9aafb7833910a60465b8.json",
+					"name" : "project-tests",
 					"projectIndex" : 0
 				}
 			]

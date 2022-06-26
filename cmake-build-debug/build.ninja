@@ -41,6 +41,47 @@ include CMakeFiles/rules.ninja
 
 cmake_ninja_workdir = C$:/Users/Горяинов$ Кирилл/CLionProjects/frick/cmake-build-debug/
 # =============================================================================
+# Object build statements for EXECUTABLE target project-tests
+
+
+#############################################
+# Order-only phony target for project-tests
+
+build cmake_object_order_depends_target_project-tests: phony || cmake_object_order_depends_target_doctest
+
+build CMakeFiles/project-tests.dir/tests.cpp.obj: CXX_COMPILER__project-tests_Debug C$:/Users/Горяинов$ Кирилл/CLionProjects/frick/tests.cpp || cmake_object_order_depends_target_project-tests
+  DEP_FILE = CMakeFiles\project-tests.dir\tests.cpp.obj.d
+  FLAGS = -g -std=gnu++20
+  INCLUDES = -IC:/SFML/include -I"C:/Users/Горяинов Кирилл/CLionProjects/frick/external"
+  OBJECT_DIR = CMakeFiles\project-tests.dir
+  OBJECT_FILE_DIR = CMakeFiles\project-tests.dir
+
+build CMakeFiles/project-tests.dir/generation.cpp.obj: CXX_COMPILER__project-tests_Debug C$:/Users/Горяинов$ Кирилл/CLionProjects/frick/generation.cpp || cmake_object_order_depends_target_project-tests
+  DEP_FILE = CMakeFiles\project-tests.dir\generation.cpp.obj.d
+  FLAGS = -g -std=gnu++20
+  INCLUDES = -IC:/SFML/include -I"C:/Users/Горяинов Кирилл/CLionProjects/frick/external"
+  OBJECT_DIR = CMakeFiles\project-tests.dir
+  OBJECT_FILE_DIR = CMakeFiles\project-tests.dir
+
+
+# =============================================================================
+# Link build statements for EXECUTABLE target project-tests
+
+
+#############################################
+# Link the executable project-tests.exe
+
+build project-tests.exe: CXX_EXECUTABLE_LINKER__project-tests_Debug CMakeFiles/project-tests.dir/tests.cpp.obj CMakeFiles/project-tests.dir/generation.cpp.obj | libdoctest.a || libdoctest.a
+  FLAGS = -g
+  LINK_LIBRARIES = libdoctest.a  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
+  OBJECT_DIR = CMakeFiles\project-tests.dir
+  POST_BUILD = cd .
+  PRE_LINK = cd .
+  TARGET_FILE = project-tests.exe
+  TARGET_IMPLIB = libproject-tests.dll.a
+  TARGET_PDB = project-tests.exe.dbg
+
+# =============================================================================
 # Object build statements for EXECUTABLE target frick
 
 
@@ -73,6 +114,14 @@ build CMakeFiles/frick.dir/generation.cpp.obj: CXX_COMPILER__frick_Debug C$:/Use
   OBJECT_DIR = CMakeFiles\frick.dir
   OBJECT_FILE_DIR = CMakeFiles\frick.dir
 
+build CMakeFiles/frick.dir/tests.cpp.obj: CXX_COMPILER__frick_Debug C$:/Users/Горяинов$ Кирилл/CLionProjects/frick/tests.cpp || cmake_object_order_depends_target_frick
+  DEFINES = -DSFML_STATIC
+  DEP_FILE = CMakeFiles\frick.dir\tests.cpp.obj.d
+  FLAGS = -g -std=gnu++20
+  INCLUDES = -isystem C:/SFML/include
+  OBJECT_DIR = CMakeFiles\frick.dir
+  OBJECT_FILE_DIR = CMakeFiles\frick.dir
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target frick
@@ -81,7 +130,7 @@ build CMakeFiles/frick.dir/generation.cpp.obj: CXX_COMPILER__frick_Debug C$:/Use
 #############################################
 # Link the executable frick.exe
 
-build frick.exe: CXX_EXECUTABLE_LINKER__frick_Debug CMakeFiles/frick.dir/main.cpp.obj CMakeFiles/frick.dir/camera.cpp.obj CMakeFiles/frick.dir/generation.cpp.obj | C$:/SFML/lib/libsfml-system-s-d.a C$:/SFML/lib/libsfml-window-s-d.a C$:/SFML/lib/libsfml-graphics-s-d.a C$:/SFML/lib/libsfml-audio-s-d.a C$:/SFML/lib/libsfml-window-s-d.a C$:/SFML/lib/libfreetype.a C$:/SFML/lib/libsfml-system-s-d.a C$:/SFML/lib/libopenal32.a C$:/SFML/lib/libvorbisfile.a C$:/SFML/lib/libvorbisenc.a C$:/SFML/lib/libvorbis.a C$:/SFML/lib/libogg.a C$:/SFML/lib/libFLAC.a
+build frick.exe: CXX_EXECUTABLE_LINKER__frick_Debug CMakeFiles/frick.dir/main.cpp.obj CMakeFiles/frick.dir/camera.cpp.obj CMakeFiles/frick.dir/generation.cpp.obj CMakeFiles/frick.dir/tests.cpp.obj | C$:/SFML/lib/libsfml-system-s-d.a C$:/SFML/lib/libsfml-window-s-d.a C$:/SFML/lib/libsfml-graphics-s-d.a C$:/SFML/lib/libsfml-audio-s-d.a C$:/SFML/lib/libsfml-window-s-d.a C$:/SFML/lib/libfreetype.a C$:/SFML/lib/libsfml-system-s-d.a C$:/SFML/lib/libopenal32.a C$:/SFML/lib/libvorbisfile.a C$:/SFML/lib/libvorbisenc.a C$:/SFML/lib/libvorbis.a C$:/SFML/lib/libogg.a C$:/SFML/lib/libFLAC.a
   FLAGS = -g
   LINK_LIBRARIES = C:/SFML/lib/libsfml-system-s-d.a  C:/SFML/lib/libsfml-window-s-d.a  C:/SFML/lib/libsfml-graphics-s-d.a  C:/SFML/lib/libsfml-audio-s-d.a  C:/SFML/lib/libsfml-window-s-d.a  -lgdi32  -lOpenGL32  C:/SFML/lib/libfreetype.a  C:/SFML/lib/libsfml-system-s-d.a  -lwinmm  C:/SFML/lib/libopenal32.a  C:/SFML/lib/libvorbisfile.a  C:/SFML/lib/libvorbisenc.a  C:/SFML/lib/libvorbis.a  C:/SFML/lib/libogg.a  C:/SFML/lib/libFLAC.a  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\frick.dir
@@ -90,17 +139,6 @@ build frick.exe: CXX_EXECUTABLE_LINKER__frick_Debug CMakeFiles/frick.dir/main.cp
   TARGET_FILE = frick.exe
   TARGET_IMPLIB = libfrick.dll.a
   TARGET_PDB = frick.exe.dbg
-
-
-#############################################
-# Utility command for edit_cache
-
-build CMakeFiles/edit_cache.util: CUSTOM_COMMAND
-  COMMAND = cmd.exe /C "cd /D "C:\Users\Горяинов Кирилл\CLionProjects\frick\cmake-build-debug" && "D:\CLion 2021.3.3\bin\cmake\win\bin\cmake.exe" -E echo "No interactive CMake dialog available.""
-  DESC = No interactive CMake dialog available...
-  restat = 1
-
-build edit_cache: phony CMakeFiles/edit_cache.util
 
 
 #############################################
@@ -114,10 +152,69 @@ build CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
 
 build rebuild_cache: phony CMakeFiles/rebuild_cache.util
 
+
+#############################################
+# Utility command for test
+
+build CMakeFiles/test.util: CUSTOM_COMMAND
+  COMMAND = cmd.exe /C "cd /D "C:\Users\Горяинов Кирилл\CLionProjects\frick\cmake-build-debug" && "D:\CLion 2021.3.3\bin\cmake\win\bin\ctest.exe" --force-new-ctest-process "
+  DESC = Running tests...
+  pool = console
+  restat = 1
+
+build test: phony CMakeFiles/test.util
+
+# =============================================================================
+# Object build statements for STATIC_LIBRARY target doctest
+
+
+#############################################
+# Order-only phony target for doctest
+
+build cmake_object_order_depends_target_doctest: phony || CMakeFiles/doctest.dir
+
+build CMakeFiles/doctest.dir/external/doctest.cpp.obj: CXX_COMPILER__doctest_Debug C$:/Users/Горяинов$ Кирилл/CLionProjects/frick/external/doctest.cpp || cmake_object_order_depends_target_doctest
+  DEP_FILE = CMakeFiles\doctest.dir\external\doctest.cpp.obj.d
+  FLAGS = -g -std=gnu++11
+  INCLUDES = -IC:/SFML/include -I"C:/Users/Горяинов Кирилл/CLionProjects/frick/external"
+  OBJECT_DIR = CMakeFiles\doctest.dir
+  OBJECT_FILE_DIR = CMakeFiles\doctest.dir\external
+
+
+# =============================================================================
+# Link build statements for STATIC_LIBRARY target doctest
+
+
+#############################################
+# Link the static library libdoctest.a
+
+build libdoctest.a: CXX_STATIC_LIBRARY_LINKER__doctest_Debug CMakeFiles/doctest.dir/external/doctest.cpp.obj
+  LANGUAGE_COMPILE_FLAGS = -g
+  OBJECT_DIR = CMakeFiles\doctest.dir
+  POST_BUILD = cd .
+  PRE_LINK = cd .
+  TARGET_FILE = libdoctest.a
+  TARGET_PDB = doctest.a.dbg
+
+
+#############################################
+# Utility command for edit_cache
+
+build CMakeFiles/edit_cache.util: CUSTOM_COMMAND
+  COMMAND = cmd.exe /C "cd /D "C:\Users\Горяинов Кирилл\CLionProjects\frick\cmake-build-debug" && "D:\CLion 2021.3.3\bin\cmake\win\bin\cmake.exe" -E echo "No interactive CMake dialog available.""
+  DESC = No interactive CMake dialog available...
+  restat = 1
+
+build edit_cache: phony CMakeFiles/edit_cache.util
+
 # =============================================================================
 # Target aliases.
 
+build doctest: phony libdoctest.a
+
 build frick: phony frick.exe
+
+build project-tests: phony project-tests.exe
 
 # =============================================================================
 # Folder targets.
@@ -127,7 +224,7 @@ build frick: phony frick.exe
 #############################################
 # Folder: C:/Users/Горяинов Кирилл/CLionProjects/frick/cmake-build-debug
 
-build all: phony frick.exe
+build all: phony project-tests.exe frick.exe libdoctest.a
 
 # =============================================================================
 # Built-in targets

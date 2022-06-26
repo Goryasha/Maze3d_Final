@@ -11,9 +11,9 @@
  * @param xdeg - угол поворота камеры на плоскости xy;
  * @param zdeg - угол поворота камеры на плоскости xz.
  */
-struct SCam{
-    float x,y,z;
-    float xdeg,zdeg;
+struct SCam {
+    float x, y, z;
+    float xdeg, zdeg;
 };
 
 /**
@@ -22,14 +22,14 @@ struct SCam{
  * @param coordiny - размер лабиринта по оси y;
  * @param coordinz - размер лабиринта по оси z.
  */
-void Camera_Apply(int coordinx,int coordiny,int coordinz);
+void Camera_Apply(int coordinx, int coordiny, int coordinz);
 
 /**
  * Поворачивает камеру на указанные углы по двум плоскостям.
  * @param xAngle - угол по оси xy;
  * @param zAngle - угол по оси xz.
  */
-void Camera_Rotation(float xAngle,float zAngle);
+void Camera_Rotation(float xAngle, float zAngle);
 
 /**
  * Функция поворота камеры по повортоу мыши.
