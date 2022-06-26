@@ -1,4 +1,4 @@
-// Главный скрипт нашей прогрмаммы, ответственный за генерацию лабиринта и его отрисовку.
+//// Главный скрипт нашей прогрмаммы, ответственный за генерацию лабиринта и его отрисовку.
 #include <windows.h>
 #include <gl/gl.h>
 #include <cmath>
@@ -6,14 +6,14 @@
 #include "camera.h"
 #include "vector"
 
+/**
+ * @param hwnd - Маркер окна Windows, показывающий верхнее открытое окно. Вынесен из WinMain для возможности использования в других функциях;
+ * @param texture - Переменная, в которую далее будет записана текстура;
+ * @param texIndCnt - Длина набора индексов отрисовываемых текстур.
+ */
 HWND hwnd;
-// Маркер окна Windows, показывающий верхнее открытое окно. Вынесен из WinMain для возможности использования в других функциях.
-
 unsigned int texture;
-// Переменная, в которую далее будет записана текстура.
-
 int texIndCnt;
-// Длина набора индексов отрисовываемых текстур.
 
 void compare(std::vector<int> &current,bool &back,bool &right,bool &forw,bool &left,bool &bot,bool &top){
     if (back) {
@@ -75,7 +75,6 @@ void texindForm(int c,std::vector<int> &v2,std::vector <std::vector <int>> &base
     bool forw =true;
     bool back =true;
     std::vector <int> current={};
-    // Переменный описаны в function.h.
 
     for (int i = 0; i < v2.size(); i+=2) {
         if (i!=0) {
@@ -110,18 +109,22 @@ void texindForm(int c,std::vector<int> &v2,std::vector <std::vector <int>> &base
 }
 
 void Load_Texture(){
+    /**
+     * @param width - ширина текстуры;
+     * @param hight - высота текстуры.
+     */
     int width=2;
     int height=2;
-    //Переменные хранят в себе ширину и высоту текстуры, то есть она будет 2*2.
+
+    /**
+     * Структурка, хранящая в себе для каждого из блоков цвет и альфа-канал.
+     * @param r - красный;
+     * @param g - зеленый;
+     * @param b - синий;
+     * @param a - альфа-канал.
+     */
     struct {unsigned char r,g,b,a;} data[2][2] = {{0,0,0,0},
                                                  {0,0,0,0}};
-    /*
-     * Структурка, хранящая в себе для каждого из блоков цвет и альфа-канал.
-     * r - красный;
-     * g - зеленый;
-     * b - синий;
-     * a - альфа-канал.
-     */
     data[0][0].r=255;
     data[1][0].g=255;
     data[1][1].b=255;
@@ -129,6 +132,10 @@ void Load_Texture(){
     data[0][1].g=255;
 
 
+    /**
+     * Эта часть кода создает на движке gl одну текстуру, записывает параметры ее распространения на область тектсурирования,
+     * параметры цвета из data и наконец очищает буфер текстур.
+     */
     glGenTextures(1,&texture);
     glBindTexture(GL_TEXTURE_2D, texture);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_REPEAT);
@@ -138,33 +145,31 @@ void Load_Texture(){
     glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA,width,height,0, GL_RGBA,GL_UNSIGNED_BYTE,data);
     glBindTexture(GL_TEXTURE_2D,0);
     glBindTexture(0,texture);
-    /*
-     * Эта часть кода создает на движке gl 1 текстуру, записывает параметры ее распространения на область тектсурирования,
-     * параметры цвета из data и наконец очищает буфер текстур.
-     */
 }
 
 void Win_Resize(int x, int y){
     glViewport(0,0,x,y);
+    /**
+     * @param k - отношение длины к ширине окна.
+     * @param sz - коэффициент проектирования.
+     */
     float k = x/(float)y;
-    // k - отношение длины к ширине окна.
     float sz=0.1;
-    // sz - коэффициент проектирования.
     glLoadIdentity();
     glFrustum(-k*sz,k*sz,-sz,sz,sz*2,80);
-    // Вот и наша перспективная проекция.
+    //// Вот и наша перспективная проекция.
 }
 
 void GameInit(){
     Load_Texture();
 
+    /**
+     * Получаем координаты клиентской области окна, переделываем перспективную проекцию и включаем тест глубины.
+     * @param rct - определяет прямоугольник по координатам его верхнего левого и нижнего правых углов.
+     */
     RECT rct;
     GetClientRect(hwnd,&rct);
     Win_Resize(rct.right,rct.bottom);
-    /*
-     * Получаем координаты клиентской области окна, переделываем перспективную проекцию и включаем тест глубины.
-     * rct - определяет прямоугольник по координатам его верхнего левого и нижнего правых углов.
-     */
     glEnable(GL_DEPTH_TEST);
 }
 
@@ -174,36 +179,41 @@ void Player_Move(){
 }
 
 void ShowWorld(float *vert,GLuint *ind, float *ppp, int ind_size, int vert_size,float *tex_coord,float *vertex,std::vector <std::vector <int>> &baseInd){
+    //// Устанавливаем цвет фона и вклбчаем очищения буффера цвета и глубины.
     glClearColor(0.6196078431372549f, 0.9725490196078431f, 0.9333333333333333f, 0.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    //Устанавливаем цвет фона и вклбчаем очищения буффера цвета и глубины.
     glEnable(GL_TEXTURE_2D);
+    //// Биндим текстуру
     glBindTexture(GL_TEXTURE_2D,texture);
-    //Биндим текстуру
     glPushMatrix();
+    //// Добавляем камеру и увеличиваем размер изображения в 5 раз.
     Camera_Apply(coordinatex,coordinatey,coordinatez);
     glScalef(5,5,5);
-    // Добавляем камеру и увеличиваем размер изображения в 5 раз.
     glEnableClientState(GL_VERTEX_ARRAY);
 
 
+//// Отрисовка лабиринта как дерева
 //    glVertexPointer(3,GL_FLOAT,0,vert);
 //    glColor3f(0.203921568627451,0.5333333333333333,0.5333333333333333);
 //    glLineWidth(3);
 //    glDrawElements(GL_LINES,ind_size,GL_UNSIGNED_INT,ind);
-// Отрисовка лабиринта как дерева
 
+//// Отрисовка финальной точки.
     glVertexPointer(3,GL_FLOAT,0,ppp);
-    glColor3f(0.9490196078431373,0.2666666666666667,0.0196078431372549);
+//    glColor3f(0.9490196078431373,0.2666666666666667,0.0196078431372549);
+    glColor3f(0,0,0);
     glPointSize(50);
     glDrawArrays(GL_POINTS,0,1);
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-// Отрисовка финальной точки.
 
     glColor3f(1,1,1);
     glEnableClientState(GL_VERTEX_ARRAY);
     glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
+    /**
+     * На каждой итерации цикла для соответствующего индекса ноды из вектора набора индексов выбираются нужные координаты,
+     * отрисовываются кубы и текстуры на них.
+     */
     for (int i=0;i<ind_size;i+=2){
         glVertexPointer(3,GL_FLOAT,0,vertex);
         glTexCoordPointer(2,GL_FLOAT,0,tex_coord);
@@ -220,10 +230,6 @@ void ShowWorld(float *vert,GLuint *ind, float *ppp, int ind_size, int vert_size,
         glDrawElements(GL_TRIANGLES,texIndCnt,GL_UNSIGNED_INT,curr);
         glPopMatrix();
     }
-    /*
-     * На каждой итерации цикла для соответствующего индекса ноды из вектора набора индексов выбираются нужные координаты,
-     * отрисовываются кубы и текстуры на них.
-     */
 
     glDisableClientState(GL_VERTEX_ARRAY);
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -235,27 +241,28 @@ void ShowWorld(float *vert,GLuint *ind, float *ppp, int ind_size, int vert_size,
 
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow){
+    /**
+     * @param vertex - координаты единичного куба;
+     * @param tex_coord - массив текстурных координат.
+     * @param baseInd - двумерный вектор, в котором для каждого индекса единичного куба лежит набор индексов отрисовываемых текстур;
+     * @param v1 - вектор координат нод;
+     * @param v2 - вектор индексов нод;
+     */
     float vertex[]={-0.5,-0.5,-0.5, 0.5,-0.5,-0.5, 0.5,0.5,-0.5, -0.5,0.5,-0.5,
                     -0.5,-0.5,0.5, 0.5,-0.5,0.5, 0.5,0.5,0.5, -0.5,0.5,0.5};
     float tex_coord[]={0,1, 1,1, 0,1, 1,1,
                        0,0,1,0,0,0,1,0};
-    /*
-     * vertex - координаты единичного куба;
-     * tex_coord - массив текстурных координат.
-     */
-
     std::vector <std::vector <int>> baseInd;
     auto v1 =std::vector<float>();
     auto v2 =std::vector<int>();
     auto p = gen(coordinatex,coordinatey,coordinatez,x_weight,y_weight,z_weight,v1,v2);
+    //// Формирование векторов и вектора координта текстур.
     texindForm(coordinatez,v2,baseInd);
-    /*
-     * baseInd - двумерный вектор, в котором для каждого индекса единичного куба лежит набор индексов отрисовываемых текстур;
-     * v1 - вектор координат нод;
-     * v2 - вектор индексов нод;
-     * Формирование векторов и вектора координта текстур.
-     */
 
+
+    /**
+     * Переписывание векторов в массивы для дальнейшей отрисовки.
+     */
     float vert[v1.size()];
     GLuint ind[v2.size()];
     float ppp[]={(float)p.x,(float)p.y,(float)p.z};
@@ -263,24 +270,36 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     std::copy(v2.begin(),v2.end(),ind);
     int ind_size = v2.size();
     int vert_size = v1.size();
-    /*
-     * Переписывание векторов в массивы для дальнейшей отрисовки.
+
+
+    /**
+     *  Введение главных переменных для сообщением с Windows.
+     *  @param wcex - информация о классе окна;
+     *  @param hDC - дескриптор контекста устройства для отрисовки на окне;
+     *  @param msg - содержит сведения о сообщениях из очереди сообщений потока;
+     *  @param bQuit - переменная отвечающая за статус окна.
      */
-
-
     WNDCLASSEX wcex;
     HDC hDC;
     HGLRC hRC;
     MSG msg;
     BOOL bQuit = FALSE;
-    /*
-     *  Введение главных переменных для сообщением с Windows.
-     *  wcex - информация о классе окна;
-     *  hDC - дескриптор контекста устройства для отрисовки на окне;
-     *  msg - содержит сведения о сообщениях из очереди сообщений потока;
-     *  bQuit - переменная отвечающая за статус окна.
-     */
 
+    /**
+     *  @param WNDCLASSEX содержит информацию о классе окна:
+     *  @param cbSize устанавливает размер этой структуры, в байтах.
+     *  @param style устанавливает стиль класса.
+     *  @param lpfnWndProc указатель на оконную процедуру.
+     *  @param cbClsExtra устанавливает число дополнительных байт, которые размещаются вслед за структурой класса окна.
+     *  @param cbWndExtra устанавливает число дополнительных байтов, которые размещаются вслед за экземпляром окна.
+     *  @param hInstance дескриптор экземпляра, который содержит оконную процедуру для класса.
+     *  @param hIcon дескриптор значка класса.
+     *  @param hCursor дескриптор курсора класса.
+     *  @param hbrBackground дескриптор кисти фона класса.
+     *  @param lpszMenuName указатель на символьную строку с символом конца строки.
+     *  @param lpszClassName указатель на символьную строку с нулем в конце или атом.
+     *  @param hIconSm дескриптор маленького значка, который связан с классом окна.
+     */
     wcex.cbSize = sizeof(WNDCLASSEX);
     wcex.style = CS_OWNDC;
     wcex.lpfnWndProc = WindowProc;
@@ -293,25 +312,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     wcex.lpszMenuName = NULL;
     wcex.lpszClassName = "GLSample";
     wcex.hIconSm = LoadIcon(NULL, IDI_APPLICATION);;
-    /*
-     *  WNDCLASSEX содержит информацию о классе окна:
-     *  cbSize устанавливает размер этой структуры, в байтах.
-     *  style устанавливает стиль класса.
-     *  lpfnWndProc указатель на оконную процедуру.
-     *  cbClsExtra устанавливает число дополнительных байт, которые размещаются вслед за структурой класса окна.
-     *  cbWndExtra устанавливает число дополнительных байтов, которые размещаются вслед за экземпляром окна.
-     *  hInstance дескриптор экземпляра, который содержит оконную процедуру для класса.
-     *  hIcon дескриптор значка класса.
-     *  hCursor дескриптор курсора класса.
-     *  hbrBackground дескриптор кисти фона класса.
-     *  lpszMenuName указатель на символьную строку с символом конца строки.
-     *  lpszClassName указатель на символьную строку с нулем в конце или атом.
-     *  hIconSm дескриптор маленького значка, который связан с классом окна.
-     */
 
     if (!RegisterClassEx(&wcex))
         return 0;
 
+    //// Задаем параметры открывающегося окна, в том числе размемер и наваниею
     hwnd = CreateWindowEx(0,
                           "GLSample",
                           "Maze3D",
@@ -324,24 +329,18 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                           NULL,
                           hInstance,
                           NULL);
-    /*
-     * Задаем параметры открывающегося окна, в том числе размемер и навание
-     */
 
+    //// Открытие окна.
     ShowWindow(hwnd, nCmdShow);
-    /*
-     * Открытие окна
-     */
 
-
+    ////Применяем OpenGl для Windows.
     EnableOpenGL(hwnd, &hDC, &hRC);
-    /*
-     * Применяем OpenGl для Windows.
-     */
 
     GameInit();
+    //// Тело цикла в котором и происходит отрисовка объектов.
     while (!bQuit)
     {
+        //// Реакция программы на всплявающие сообщения.
         if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
         {
             if (msg.message == WM_QUIT)
@@ -353,9 +352,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                 TranslateMessage(&msg);
                 DispatchMessage(&msg);
             }
-            /*
-             * Реакция программы на всплявающие сообщения.
-             */
         }
         else
         {
@@ -367,24 +363,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
             Sleep (1);
         }
-        /*
-         * Проверка на вылетающие сообщения.
-         */
     }
-    /*
-     * Тело цикла в котором и происходит отрисовка объектов.
-     */
 
+    //// Отключение OpenGl.
     DisableOpenGL(hwnd, hDC, hRC);
-    /*
-     * Отключение OpenGl.
-     */
 
+    //// Закрытие окна.
     DestroyWindow(hwnd);
-    /*
-     * Закрытие окна.
-     */
-
     return msg.wParam;
 }
 
@@ -425,7 +410,8 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
     return 0;
 }
-// Базовые строки кода для OpenGL. Написаны не мной.
+
+//// Базовые строки кода для OpenGL. Написаны не мной.
 void EnableOpenGL(HWND hwnd, HDC* hDC, HGLRC* hRC)
 {
     PIXELFORMATDESCRIPTOR pfd;

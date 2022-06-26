@@ -1,9 +1,10 @@
-//Функции взамодействия программы с камерой.
+////Функции взамодействия программы с камерой.
 #include "camera.h"
 #include <gl/gl.h>
 #include <windows.h>
 #include <cmath>
 
+//// Начальные атрибуты камеры.
 SCam camera ={0,0,1.7,70,-40};
 
 void Camera_Apply(int coordinx,int coordiny,int coordinz){
@@ -25,21 +26,16 @@ void Camera_Rotation(float xAngle,float zAngle){
     if(camera.xdeg<0) camera.xdeg=0;
     if(camera.xdeg>180) camera.xdeg=180;
 }
-/*
- * Поворачивает камеру на указанные углы по двум плоскостям.
- * xAngle - угол по оси xy;
- * zAngle - угол по оси xz;
- */
 
 void Camera_MoveByMouse(int CenterX, int CenterY){
+    /**
+     * @param angle - угол поворота камеры;
+     * @param speed - скорость перемешения камеры в плоскости xy;
+     * @param speedz - скорость перемешения камеры по z;
+     */
     float angle = -camera.zdeg / 180 * M_PI ;
     float speed =0;
     float speedz =0;
-    /*
-     * angle - угол поворота камеры;
-     * speed - скорость перемешения камеры в плоскости xy;
-     * speedz - скорость перемешения камеры по z;
-     */
     if (GetKeyState('W')<0) speed =0.1;
     if (GetKeyState(VK_SPACE)<0) speedz =0.1;
     if (GetKeyState(VK_CONTROL)<0 || GetKeyState(VK_SHIFT)<0) speedz =-0.1;
@@ -54,18 +50,13 @@ void Camera_MoveByMouse(int CenterX, int CenterY){
         camera.z+=speedz;
     }
 
+    /**
+     * @param cur - содержит новое положение курсора на экране;
+     * @param base - базове положение курсора на экране;
+     */
     POINT cur;
     POINT base ={CenterX,CenterY};
-    /*
-     * cur - содержит новое положение курсора на экране;
-     * base - базове положение курсора на экране;
-     */
     GetCursorPos(&cur);
     Camera_Rotation((base.y-cur.y)/5.0,(base.x-cur.x)/5.0);
     SetCursorPos(base.x,base.y);
 }
-/*
- * Функция поворота камеры по повортоу мыши.
- * CenterX - базовое нахождение камеры на экране по x;
- * CenterY - базовое нахождение камеры на экране по y;
- */
