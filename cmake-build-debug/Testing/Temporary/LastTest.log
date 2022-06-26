@@ -1,3 +1,54 @@
-Start testing: Jun 26 22:27 RTZ 2 (ceia)
+Start testing: Jun 26 22:56 RTZ 2 (ceia)
 ----------------------------------------------------------
-End testing: Jun 26 22:27 RTZ 2 (ceia)
+1/1 Testing: project-tests
+1/1 Test: project-tests
+Command: "C:/Users/Р“РѕСЂСЏРёРЅРѕРІ РљРёСЂРёР»Р»/CLionProjects/frick/cmake-build-debug/project-tests.exe" "--force-colors" "-d"
+Directory: C:/Users/Р“РѕСЂСЏРёРЅРѕРІ РљРёСЂРёР»Р»/CLionProjects/frick/cmake-build-debug
+"project-tests" start time: Jun 26 22:56 RTZ 2 (ceia)
+Output:
+----------------------------------------------------------
+[doctest] doctest version is "2.3.8"
+[doctest] run with "--help" for options
+===============================================================================
+C:/Users/Горяинов Кирилл/CLionProjects/frick/tests.cpp:4:
+TEST CASE:  Generation-cleaning-1
+
+0.000061 s: Generation-cleaning-1
+===============================================================================
+C:/Users/Горяинов Кирилл/CLionProjects/frick/tests.cpp:11:
+TEST CASE:  Generation-cleaning-2
+
+0.000011 s: Generation-cleaning-2
+===============================================================================
+C:/Users/Горяинов Кирилл/CLionProjects/frick/tests.cpp:18:
+TEST CASE:  Generation-cleaning-3
+
+0.000007 s: Generation-cleaning-3
+===============================================================================
+C:/Users/Горяинов Кирилл/CLionProjects/frick/tests.cpp:25:
+TEST CASE:  Generation-comparison-1
+
+0.000012 s: Generation-comparison-1
+===============================================================================
+C:/Users/Горяинов Кирилл/CLionProjects/frick/tests.cpp:38:
+TEST CASE:  Generation-comparison-2
+
+0.000013 s: Generation-comparison-2
+===============================================================================
+C:/Users/Горяинов Кирилл/CLionProjects/frick/tests.cpp:52:
+TEST CASE:  Generation-comparison-3
+
+0.000009 s: Generation-comparison-3
+===============================================================================
+[doctest] test cases:      6 |      6 passed |      0 failed |      0 skipped
+[doctest] assertions:      6 |      6 passed |      0 failed |
+[doctest] Status: SUCCESS!
+<end of output>
+Test time =   0.48 sec
+----------------------------------------------------------
+Test Passed.
+"project-tests" end time: Jun 26 22:56 RTZ 2 (ceia)
+"project-tests" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Jun 26 22:57 RTZ 2 (ceia)

@@ -15,58 +15,6 @@ HWND hwnd;
 unsigned int texture;
 int texIndCnt;
 
-void compare(std::vector<int> &current, bool &back, bool &right, bool &forw, bool &left, bool &bot, bool &top) {
-    if (back) {
-        current.push_back(3);
-        current.push_back(0);
-        current.push_back(4);
-        current.push_back(4);
-        current.push_back(7);
-        current.push_back(3);
-    }
-
-    if (right) {
-        current.push_back(0);
-        current.push_back(1);
-        current.push_back(5);
-        current.push_back(5);
-        current.push_back(4);
-        current.push_back(0);
-    }
-    if (forw) {
-        current.push_back(1);
-        current.push_back(2);
-        current.push_back(6);
-        current.push_back(6);
-        current.push_back(5);
-        current.push_back(1);
-    }
-    if (left) {
-        current.push_back(2);
-        current.push_back(3);
-        current.push_back(7);
-        current.push_back(7);
-        current.push_back(6);
-        current.push_back(2);
-    }
-    if (bot) {
-        current.push_back(3);
-        current.push_back(0);
-        current.push_back(1);
-        current.push_back(1);
-        current.push_back(2);
-        current.push_back(3);
-    }
-    if (top) {
-        current.push_back(7);
-        current.push_back(4);
-        current.push_back(5);
-        current.push_back(5);
-        current.push_back(6);
-        current.push_back(7);
-    }
-}
-
 void texindForm(int c, std::vector<int> &v2, std::vector<std::vector<int>> &baseInd) {
     bool top = true;
     bool bot = true;

@@ -8,7 +8,7 @@ target_compile_features(default INTERFACE cxx_std_20)
 enable_testing()
 
 # Добавление SFML по инструкции с главной страницы.
-add_executable(frick main.cpp camera.cpp generation.cpp function.h camera.h function.h tests.cpp)
+add_executable(frick main.cpp camera.cpp generation.cpp function.h camera.h function.h)
 
 set(SFML_STATIC_LIBRARIES TRUE)
 set(SFML_DIR C:/SFML/lib/cmake/SFML)

@@ -114,14 +114,6 @@ build CMakeFiles/frick.dir/generation.cpp.obj: CXX_COMPILER__frick_Debug C$:/Use
   OBJECT_DIR = CMakeFiles\frick.dir
   OBJECT_FILE_DIR = CMakeFiles\frick.dir
 
-build CMakeFiles/frick.dir/tests.cpp.obj: CXX_COMPILER__frick_Debug C$:/Users/Горяинов$ Кирилл/CLionProjects/frick/tests.cpp || cmake_object_order_depends_target_frick
-  DEFINES = -DSFML_STATIC
-  DEP_FILE = CMakeFiles\frick.dir\tests.cpp.obj.d
-  FLAGS = -g -std=gnu++20
-  INCLUDES = -isystem C:/SFML/include
-  OBJECT_DIR = CMakeFiles\frick.dir
-  OBJECT_FILE_DIR = CMakeFiles\frick.dir
-
 
 # =============================================================================
 # Link build statements for EXECUTABLE target frick
@@ -130,7 +122,7 @@ build CMakeFiles/frick.dir/tests.cpp.obj: CXX_COMPILER__frick_Debug C$:/Users/Го
 #############################################
 # Link the executable frick.exe
 
-build frick.exe: CXX_EXECUTABLE_LINKER__frick_Debug CMakeFiles/frick.dir/main.cpp.obj CMakeFiles/frick.dir/camera.cpp.obj CMakeFiles/frick.dir/generation.cpp.obj CMakeFiles/frick.dir/tests.cpp.obj | C$:/SFML/lib/libsfml-system-s-d.a C$:/SFML/lib/libsfml-window-s-d.a C$:/SFML/lib/libsfml-graphics-s-d.a C$:/SFML/lib/libsfml-audio-s-d.a C$:/SFML/lib/libsfml-window-s-d.a C$:/SFML/lib/libfreetype.a C$:/SFML/lib/libsfml-system-s-d.a C$:/SFML/lib/libopenal32.a C$:/SFML/lib/libvorbisfile.a C$:/SFML/lib/libvorbisenc.a C$:/SFML/lib/libvorbis.a C$:/SFML/lib/libogg.a C$:/SFML/lib/libFLAC.a
+build frick.exe: CXX_EXECUTABLE_LINKER__frick_Debug CMakeFiles/frick.dir/main.cpp.obj CMakeFiles/frick.dir/camera.cpp.obj CMakeFiles/frick.dir/generation.cpp.obj | C$:/SFML/lib/libsfml-system-s-d.a C$:/SFML/lib/libsfml-window-s-d.a C$:/SFML/lib/libsfml-graphics-s-d.a C$:/SFML/lib/libsfml-audio-s-d.a C$:/SFML/lib/libsfml-window-s-d.a C$:/SFML/lib/libfreetype.a C$:/SFML/lib/libsfml-system-s-d.a C$:/SFML/lib/libopenal32.a C$:/SFML/lib/libvorbisfile.a C$:/SFML/lib/libvorbisenc.a C$:/SFML/lib/libvorbis.a C$:/SFML/lib/libogg.a C$:/SFML/lib/libFLAC.a
   FLAGS = -g
   LINK_LIBRARIES = C:/SFML/lib/libsfml-system-s-d.a  C:/SFML/lib/libsfml-window-s-d.a  C:/SFML/lib/libsfml-graphics-s-d.a  C:/SFML/lib/libsfml-audio-s-d.a  C:/SFML/lib/libsfml-window-s-d.a  -lgdi32  -lOpenGL32  C:/SFML/lib/libfreetype.a  C:/SFML/lib/libsfml-system-s-d.a  -lwinmm  C:/SFML/lib/libopenal32.a  C:/SFML/lib/libvorbisfile.a  C:/SFML/lib/libvorbisenc.a  C:/SFML/lib/libvorbis.a  C:/SFML/lib/libogg.a  C:/SFML/lib/libFLAC.a  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\frick.dir
